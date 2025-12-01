@@ -1,4 +1,5 @@
 import os
+import torch
 
 def get_base_dir():
     home_dir = os.path.expanduser("~")
@@ -13,3 +14,10 @@ def get_dist_info():
 def print0(s="", **kwargs):
     if int(os.environ.get('RANK', 0)) == 0:
         print(s, **kwargs)
+
+def autodetect_device_type():
+    if torch.cuda.is_available():
+        return "cuda"
+    elif torch.backends.mps.is_available():
+        return "mps"
+    return "cpu"
