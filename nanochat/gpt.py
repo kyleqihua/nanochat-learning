@@ -68,4 +68,12 @@ class GPT(nn.Module):
         })
         self.lm_head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
     
+    def forward(self, idx, targets=None):
+        x = self.transformer["wte"](idx)
+        x = norm(x)
+        for block in self.transformer["h"]:
+            x = block(x)
+        x = norm(x)
+        logits = self.lm_head(x)
+        return logits
     
