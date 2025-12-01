@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 class GPTConfig:
     def __init__(self, vocab_size=50304, n_layer=12, n_head=6, n_embd=768):
@@ -7,3 +8,6 @@ class GPTConfig:
         self.n_layer = n_layer
         self.n_head = n_head
         self.n_embd = n_embd
+
+def norm(x):
+    return F.rms_norm(x, (x.size(-1),))
