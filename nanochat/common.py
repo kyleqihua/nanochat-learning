@@ -9,3 +9,7 @@ def get_dist_info():
     if ddp:
         return True, int(os.environ['RANK']), int(os.environ['LOCAL_RANK']), int(os.environ['WORLD_SIZE'])
     return False, 0, 0, 1
+
+def print0(s="", **kwargs):
+    if int(os.environ.get('RANK', 0)) == 0:
+        print(s, **kwargs)
