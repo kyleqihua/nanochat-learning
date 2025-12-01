@@ -57,3 +57,15 @@ class Block(nn.Module):
         x = x + self.attn(norm(x))
         x = x + self.mlp(norm(x))
         return x 
+
+class GPT(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.config = config
+        self.transformer = nn.ModuleDict({
+            "wte": nn.Embedding(config.vocab_size, config.n_embd),
+            "h": nn.ModuleList([Block(config) for _ in range(config.n_layer)]),
+        })
+        self.lm_head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
+    
+    
