@@ -46,3 +46,14 @@ class CausalSelfAttention(nn.Module):
         y = y.transpose(1, 2).contiguous().view(B, T, C)
         y = self.c_proj(y)
         return y
+
+class Block(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.attn = CausalSelfAttention(config)
+        self.mlp = MLP(config)
+    
+    def forward(self, x):
+        x = x + self.attn(norm(x))
+        x = x + self.mlp(norm(x))
+        return x 
