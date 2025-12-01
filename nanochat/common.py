@@ -1,5 +1,6 @@
 import os
 import torch
+import torch.distributed as dist
 
 def get_base_dir():
     home_dir = os.path.expanduser("~")
@@ -21,3 +22,9 @@ def autodetect_device_type():
     elif torch.backends.mps.is_available():
         return "mps"
     return "cpu"
+
+def compute_init(device_type="cuda"):
+    torch.manual_seed(42)
+    ddp, rank, local_rank, world_size = get_dist_info()
+    device = torch.device(device_type)
+    return ddp, rank, local_rank, world_size, device
